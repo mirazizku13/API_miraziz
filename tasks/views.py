@@ -6,7 +6,7 @@ from rest_framework import status, viewsets
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
+from django_filters.rest_framework import DjangoFilterBackend
 from tasks.models import Car
 from tasks.serializers import CarListSerializer, CarCreateAndUpdateSerializer, RegisterSerializer
 
@@ -49,7 +49,21 @@ def salom(request):
 class CarViewSet(viewsets.ModelViewSet):
     queryset = Car.objects.all()
     serializer_class = CarListSerializer
+    #
+    # def get_queryset(self):
+    #     search = self.request.query_params.get('search')
+    #     if search:
+    #         return self.queryset.filter(name__icontains=search)
+    #     return self.queryset
 
+    filter_backends = [DjangoFilterBackend,SearchFilter,OrderingFilter]
+
+    filterset_fields = ['title','created_at']
+
+    search_fields = ['title','content']
+    ordering_fields = ['created_at' , 'title']
+
+    ordering = ['-created_at']
 class RegisterView(APIView):
     permission_classes = [AllowAny]
     def post(self, request):
