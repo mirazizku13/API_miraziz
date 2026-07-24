@@ -9,12 +9,14 @@ class CarListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Car
         fields = ('id', 'name', 'description', 'price', 'brand', 'model', 'year')
+        read_only_fields = ['author']
         extra_kwargs = {'id': {'read_only': True}}
 
 class CarCreateAndUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Car
         fields = ('id', 'name', 'description', 'price', 'brand', 'model', 'year')
+        read_only_fields = ['author']
         extra_kwargs = {'id': {'read_only': True}}
 
     def validate(self, data):

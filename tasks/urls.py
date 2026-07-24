@@ -5,7 +5,7 @@ from . import views
 from .views import CarViewSet, LogoutView, LoginView, RegisterView
 
 router = routers.DefaultRouter()
-router.register('car', views.CarViewSet, basename='car')
+router.register('car', CarViewSet, basename='car')
 urlpatterns = [
     # path('', views.salom, name='salom'),
     # path('car/', views.CarList.as_view(), name='car'),

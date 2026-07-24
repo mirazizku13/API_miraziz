@@ -3,6 +3,7 @@ from django.core.serializers import serialize
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404
 from rest_framework import status, viewsets
+from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -58,12 +59,16 @@ class CarViewSet(viewsets.ModelViewSet):
 
     filter_backends = [DjangoFilterBackend,SearchFilter,OrderingFilter]
 
-    filterset_fields = ['title','created_at']
+    filterset_fields = ['name']
 
-    search_fields = ['title','content']
-    ordering_fields = ['created_at' , 'title']
+    search_fields = ['name','description']
+    ordering_fields = ['year' , 'name']
 
-    ordering = ['-created_at']
+    ordering = ['-year']
+
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user)
+
 class RegisterView(APIView):
     permission_classes = [AllowAny]
     def post(self, request):
