@@ -48,22 +48,13 @@ def salom(request):
 
 
 class CarViewSet(viewsets.ModelViewSet):
-    queryset = Car.objects.all()
+    queryset = Car.objects.select_related("author")
     serializer_class = CarListSerializer
-    #
-    # def get_queryset(self):
-    #     search = self.request.query_params.get('search')
-    #     if search:
-    #         return self.queryset.filter(name__icontains=search)
-    #     return self.queryset
 
-    filter_backends = [DjangoFilterBackend,SearchFilter,OrderingFilter]
-
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_fields = ['name']
-
-    search_fields = ['name','description']
-    ordering_fields = ['year' , 'name']
-
+    search_fields = ['name', 'description']
+    ordering_fields = ['year', 'name']
     ordering = ['-year']
 
     def perform_create(self, serializer):
