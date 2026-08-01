@@ -10,7 +10,7 @@ from rest_framework.views import APIView
 from django_filters.rest_framework import DjangoFilterBackend
 from tasks.models import Car
 from tasks.serializers import CarListSerializer, CarCreateAndUpdateSerializer, RegisterSerializer
-
+from tasks.tasks import salom_task, sleep_task
 
 # Create your views here.
 def salom(request):
@@ -87,3 +87,13 @@ class LogoutView(APIView):
     def post(self,request):
         logout(request)
         return JsonResponse({'status': 'success'}, status=status.HTTP_200_OK)
+
+
+class TestView(APIView):
+    def get(self , request):
+        salom_task.delay()
+        sleep_task.delay()
+
+        return Response({
+            "massage" : "ikkalasiyam ishladi"
+        })
