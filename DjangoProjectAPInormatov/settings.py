@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django_filters',
     'drf_yasg',
     "django_celery_beat" ,
+    'channels',
 
 
 
@@ -154,3 +155,11 @@ CELERY_BROKER_URL = "redis://localhost:6379/0"
 CELERY_ACCEPT_CONTENT = ["json"]
 
 CELERY_TASK_SERIALIZER = "json"
+
+ASGI_APPLICATION = "core.asgi.application"
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer",
+    },
+}
