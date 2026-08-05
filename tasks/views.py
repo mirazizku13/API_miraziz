@@ -11,6 +11,12 @@ from django_filters.rest_framework import DjangoFilterBackend
 from tasks.models import Car
 from tasks.serializers import CarListSerializer, CarCreateAndUpdateSerializer, RegisterSerializer
 from tasks.tasks import salom_task, sleep_task
+from linecache import cache
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
+
+from tasks.throttles import CarCreateThrottle
+
 
 # Create your views here.
 def salom(request):
@@ -59,6 +65,20 @@ class CarViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
+        cache.clear()
+
+    def perform_update(self, serializer):
+        serializer.save()
+        cache.clear()
+
+    def perform_destroy(self, instance):
+        instance.delete()
+        cache.clear()
+
+    def get_throttles(self):
+        if self.action == "create":
+            return [CarCreateThrottle]
+        return super().get_throttles()
 
 class RegisterView(APIView):
     permission_classes = [AllowAny]
